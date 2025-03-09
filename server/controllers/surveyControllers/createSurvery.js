@@ -41,6 +41,29 @@ export const createSurvey = async (req, res) => {
             return res.status(403).send({ success: false, message: "Only Admin can create surveys" });
         }
 
+
+        const getSurvey = `
+            SELECT * FROM surveys WHERE title = ?;
+        `;
+
+        const result = await new Promise((resolve , reject) => {
+            db.query(getSurvey, [title], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results[0]);
+                }
+            });
+        });
+
+        if(result){
+            return res.status(400).send({
+                success: false,
+                message: "Survey with the given Title already exist"
+            });
+        }
+
         const checkOrganizationExist = `
             SELECT * FROM organizations WHERE organization_id = ? AND created_by = ?;
         `;
@@ -100,6 +123,45 @@ export const createSurvey = async (req, res) => {
                     });
                 }
             }
+        }
+
+
+        const getSurveyQuery = `
+            SELECT * FROM surveys WHERE survey_id = ?;
+        `;
+
+        const survey = await new Promise((resolve , reject) => {
+            db.query(getSurveyQuery, [surveyId], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results[0]);
+                }
+            });
+        });
+
+
+        const insertActivityLog =  `
+            INSERT INTO activity_log(user_id, table_name, record_id, action_type, activity_description)
+            VALUES(?, ?, ?, ?, ?);
+        `;
+
+        let activity_description = `Admin (${admin.full_name}) has created a Survey named as (${survey.title}) in the Organiation (${organization.organization_name})`;
+
+        const logResult = await new Promise((resolve, reject) => {
+            db.query(insertActivityLog, [admin.user_id, "surveys", surveyId, "INSERT", activity_description], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results.affectedRows);
+                }
+            });
+        });
+
+        if(logResult === 1 || logResult === '1' || logResult == 1){
+            console.log("Survey Creation Log has been inserted successfully");           
         }
 
         res.status(201).send({
