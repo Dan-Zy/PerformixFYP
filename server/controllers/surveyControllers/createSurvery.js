@@ -147,7 +147,7 @@ export const createSurvey = async (req, res) => {
             VALUES(?, ?, ?, ?, ?);
         `;
 
-        let activity_description = `Admin (${admin.full_name}) has created a Survey named as (${survey.title}) in the Organiation (${organization.organization_name})`;
+        let activity_description = `Admin (${admin.full_name}) has created a Survey named as (${survey.title}) in the Organization (${organization.organization_name})`;
 
         const logResult = await new Promise((resolve, reject) => {
             db.query(insertActivityLog, [admin.user_id, "surveys", surveyId, "INSERT", activity_description], (err, results) => {

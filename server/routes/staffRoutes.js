@@ -5,10 +5,13 @@ import { viewStaffLeaderboard } from '../controllers/staffControllers/viewStaffL
 import { addGoal } from '../controllers/staffControllers/addGoal.js';
 import { getAllGoals } from '../controllers/staffControllers/getAllGoals.js';
 import { updateGoalStatus } from '../controllers/staffControllers/updateGoalStatus.js';
+import { getStaffRecentActivity } from '../controllers/staffControllers/getStaffRecentActivity.js';
 
 const router = express.Router();
 
 router.get('/view-staff-dashboard', verifyToken, viewStaffDashboard);
+
+router.get('/get-recent-activities', verifyToken, getStaffRecentActivity);
 
 router.get('/view-staff-leaderboard', verifyToken, viewStaffLeaderboard);
 

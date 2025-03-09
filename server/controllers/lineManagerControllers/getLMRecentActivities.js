@@ -1,0 +1,84 @@
+import db from '../../config/db.js';
+import jwt from 'jsonwebtoken';
+
+export const getLMRecentActivity = async (req , res) => {
+
+    try {
+        
+        // Check if the Authorization header exists
+        let token = req.header("Authorization");
+        if (!token) {
+            return res.status(401).send({
+                success: false,
+                message: "Authorization token is required" 
+            });
+        }
+
+        // Verify the token and extract the user ID
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user_id = decoded.id;
+        
+        if (!user_id) {
+            return res.status(401).send({ 
+                success: false,
+                message: "Invalid token" 
+            });
+        }
+
+        const checkIfLM = `
+            SELECT * FROM users WHERE user_id = ? AND is_active = 1 AND role_id = 2;
+        `;
+
+        const LM = await new Promise((resolve , reject) => {
+            db.query(checkIfLM, [user_id], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results[0]);
+                }
+            });
+        });
+
+
+        if(!LM){
+            return res.status(400).send({
+                success: false,
+                message: "Only Line Manager can view the Line Manager related Recent Activities"
+            });
+        }
+
+
+        const getLMActivites = `
+            SELECT * FROM activity_log WHERE table_name = ? OR table_name = ?;
+        `;
+
+        const recentActivities = await new Promise((resolve, reject) => {
+            db.query(getLMActivites, ["line_manager_evaluations", "surveys"], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+            });
+        });
+
+        
+        return res.status(200).send({
+            success: true,
+            message: "Line Manager Recent Activities fetched successfully",
+            recentActivities_count: recentActivities.length,
+            recentActivities: recentActivities
+        });
+        
+    } catch (error) {
+        console.log("Error while fetching Line Manager recent activity: ", error);
+        return res.status(500).send({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+
+}

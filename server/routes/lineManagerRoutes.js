@@ -5,6 +5,7 @@ import { getEmployeeMetrics } from '../controllers/lineManagerControllers/getEmp
 import { viewLineManagerDashboard } from '../controllers/lineManagerControllers/viewLineManagerDashboard.js';
 import { getLMDepartments } from '../controllers/lineManagerControllers/getLMDepartments.js';
 import { viewLMLeaderboard } from './../controllers/leaderboardControllers/viewLMLeaderboard.js';
+import { getLMRecentActivity } from '../controllers/lineManagerControllers/getLMRecentActivities.js';
 
 const router = express.Router();
 
@@ -13,6 +14,8 @@ router.get('/get-employees', verifyToken, getEmployees);
 router.get('/get-employee-metrics/:user_id', verifyToken, getEmployeeMetrics);
 
 router.get('/view-lm-dashboard', verifyToken, viewLineManagerDashboard);
+
+router.get('/get-recent-activities', verifyToken, getLMRecentActivity);
 
 router.get('/get-lm-departments', verifyToken, getLMDepartments);
 

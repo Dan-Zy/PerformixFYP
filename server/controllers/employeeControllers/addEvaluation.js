@@ -346,12 +346,15 @@ export const addEvaluation = async (req , res) => {
                     reject(err);
                 }
                 else{
-                    resolve(results);
+                    resolve(results[0]);
                 }
             });
         });
 
-        if(dataExist.length !== 0 || dataExist.length !== '0' || dataExist != 0){
+        // console.log("DATA EXIST LENGTH: ", dataExist.length);
+        
+
+        if(dataExist){
             return res.status(400).send({
                 success: false,
                 message: "You have already eveluated this Employee for the given parameter of the given metric"
