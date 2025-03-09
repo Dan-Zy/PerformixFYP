@@ -35,6 +35,7 @@ import { viewLeaderboard } from "../controllers/leaderboardControllers/viewLeade
 import { addLMInDepartment } from "../controllers/userControllers/addLMInDepartment.js";
 import { getSelfEvaluations } from "../controllers/employeeControllers/getSelfEvaluations.js";
 import {googleSignIn} from '../controllers/userControllers/googleAuth.js';
+import { getadminRecentActivity } from "../controllers/userControllers/getAdminRecentActivities.js";
 
 router.get('/', getExampleData);
 
@@ -65,6 +66,8 @@ router.get('/view-report/:organization_id', verifyToken, viewReport);
 router.get('/view-leaderboard/:organization_id', verifyToken, viewLeaderboard);
 
 router.get('/view-admin-dashboard/:organization_id', verifyToken, viewAdminDashboard);
+
+router.get('/get-recent-activities', verifyToken, getadminRecentActivity);
 
 router.post('/add-lm-in-dept', verifyToken, addLMInDepartment);
 

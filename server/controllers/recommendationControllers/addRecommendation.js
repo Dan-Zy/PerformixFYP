@@ -63,17 +63,51 @@ export const addEmployeeRecommendation = async (req , res) => {
                     reject(err);
                 }
                 else{
-                    resolve(results.affectedRows);
+                    resolve(results);
                 }
             });
         });
 
-        if(result === 0 || result === '0' || result == 0)
+        if(result.affectedRows === 0 || result.affectedRows === '0' || result.affectedRows == 0)
         {
             return res.status(400).send({
                 success: false,
                 message: "Cannot able to add Recommendation"
             });
+        }
+
+
+        const recommendation_id = result.insertId;
+
+        var employee = "";
+
+        if(user.role_id == 2){
+            employee = "Line Manager"
+        }
+        else{
+            employee = "Staff"
+        }
+
+        const insertActivityLog =  `
+            INSERT INTO activity_log(user_id, table_name, record_id, action_type, activity_description)
+            VALUES(?, ?, ?, ?, ?);
+        `;
+
+        let activity_description = `${employee} (${user.full_name}) has added a Recommendation`;
+
+        const logResult = await new Promise((resolve, reject) => {
+            db.query(insertActivityLog, [user.user_id, "recommendations", user.created_by, "INSERT", activity_description], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results.affectedRows);
+                }
+            });
+        });
+
+        if(logResult === 1 || logResult === '1' || logResult == 1){
+            console.log("Recommendation Added Log has been inserted successfully");           
         }
 
         return res.status(201).send({

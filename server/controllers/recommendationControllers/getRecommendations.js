@@ -47,7 +47,7 @@ export const getRecommendations = async (req , res) => {
             emp.email AS employee_email, r.admin_id, ad.full_name AS admin_name, ad.email AS admin_email,
             CONVERT_TZ(r.created_on , '+00:00', '+05:00') AS created_on
             FROM recommendations r JOIN users emp ON r.employee_id = emp.user_id
-            JOIN users ad ON r.admin_id = ad.user_id WHERE r.admin_id = 1 ORDER BY r.created_on DESC;
+            JOIN users ad ON r.admin_id = ad.user_id WHERE r.admin_id = ? ORDER BY r.created_on DESC;
         `;
 
         const recommendations = await new Promise((resolve , reject) => {
