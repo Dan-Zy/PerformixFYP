@@ -336,6 +336,29 @@ export const addEvaluation = async (req , res) => {
         }
 
 
+        const checkIfSameDataExist = `
+            SELECT * FROM evaluations WHERE line_manager_id = ? AND employee_Id = ? AND metric_id = ? AND parameter_id = ?;
+        `;
+
+        const dataExist = await new Promise((resolve , reject) => {
+            db.query(checkIfSameDataExist, [line_manager_id, employee_id, metric_id, parameter_id], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results);
+                }
+            });
+        });
+
+        if(dataExist.length !== 0 || dataExist.length !== '0' || dataExist != 0){
+            return res.status(400).send({
+                success: false,
+                message: "You have already eveluated this Employee for the given parameter of the given metric"
+            });
+        }
+
+
 
         const insertEvaluationQuery = `
             INSERT INTO evaluations(line_manager_id, employee_id, metric_id, parameter_id, marks_obtained, feedback)
@@ -359,6 +382,28 @@ export const addEvaluation = async (req , res) => {
                 success: false,
                 message: "Cannot able to insert the Evaluation Data"
             });
+        }
+
+        const insertActivityLog =  `
+            INSERT INTO activity_log(user_id, table_name, record_id, action_type, activity_description)
+            VALUES(?, ?, ?, ?, ?);
+        `;
+
+        let activity_description = `Line Manager (${lineManager.full_name}) has evaluated an Employee (${employee.full_name}) for the Parameter (${parameter.parameter_name}) of Metric (${metric.metric_name})`;
+
+        const logResult = await new Promise((resolve, reject) => {
+            db.query(insertActivityLog, [lineManager.user_id, "evaluations", employee.user_id, "INSERT", activity_description], (err, results) => {
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(results.affectedRows);
+                }
+            });
+        });
+
+        if(logResult === 1 || logResult === '1' || logResult == 1){
+            console.log("Employee Evaluation Log has been inserted successfully");           
         }
 
 

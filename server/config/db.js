@@ -240,6 +240,16 @@ const createTables = () => {
             created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (employee_id) REFERENCES users(user_id) ON DELETE CASCADE,
             FOREIGN KEY (admin_id) REFERENCES users(user_id) ON DELETE CASCADE
+        );`,
+        `CREATE TABLE IF NOT EXISTS activity_log (
+            activity_id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT,  -- The user who performed the action
+            table_name VARCHAR(255),  -- The table where the action took place
+            record_id INT,  -- The ID of the record that was modified
+            action_type ENUM('INSERT', 'UPDATE', 'DELETE'),  -- Type of action
+            activity_description TEXT,  -- Detailed description of the action
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,  -- When the action occurred
+            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
         );`
     ];
 
