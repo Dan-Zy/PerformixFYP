@@ -46,7 +46,7 @@ export const requestResetPassword = async (req, res) => {
         });
 
         // Send the reset link to the user's email
-        const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+        const resetLink = `http://localhost:5173/new-password`;
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -59,7 +59,8 @@ export const requestResetPassword = async (req, res) => {
             from: process.env.EMAIL_USER,
             to: user.email, // Retrieve email from the user's record
             subject: 'Password Reset Request for Performix Platform',
-            html: `<p>You requested a password reset. Click <a href="${resetLink}">${resetLink}</a> to reset your password.</p>`,
+            html: `<p>You requested a password reset. Click <a href="${resetLink}">${resetLink}</a> to reset your password.</p>
+            <p>Use this as a Reset Token: <b>${resetToken}</b>.</p>`,
         };
 
         await transporter.sendMail(mailOptions);
