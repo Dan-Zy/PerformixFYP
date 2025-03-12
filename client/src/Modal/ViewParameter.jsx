@@ -111,7 +111,7 @@ const ViewParameter = ({ isOpen, onClose, parameterData }) => {
         size="lg"
         onClose={onClose}
         popup
-        className="backdrop:bg-black/50"
+        className="bg-gray-100"
       >
         <Modal.Header />
         <Modal.Body>

@@ -177,7 +177,7 @@ console.log("Profile Update Response:", response.data);
               />
             </div>
            
-            <div className="md:col-span-2">
+            {/* <div className="md:col-span-2">
               <Label htmlFor="address" value="Address" />
               <TextInput
                 id="address"
@@ -187,7 +187,7 @@ console.log("Profile Update Response:", response.data);
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-4 flex justify-end space-x-2">

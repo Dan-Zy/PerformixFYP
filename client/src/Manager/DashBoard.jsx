@@ -142,7 +142,7 @@ export default function Dashboard() {
       <div className="bg-white shadow p-6 rounded-lg">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Graphical Performance</h2>
-          <Dropdown
+          {/* <Dropdown
             label={selectedFilter}
             inline={true}
             arrowIcon={true}
@@ -157,7 +157,7 @@ export default function Dashboard() {
             <Dropdown.Item onClick={() => handleFilterChange("Last Week")}>
               Last Week
             </Dropdown.Item>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>

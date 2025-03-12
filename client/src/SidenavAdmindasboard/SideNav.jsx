@@ -31,7 +31,7 @@ const listItemData = [
     icon: <img src={dicon} alt="Dashboard" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },
   {
-    label: "Org Details",
+    label: "Organization Details",
     link: "/admin/orgdetails",
     icon: <img src={oicon} alt="Org Details" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },
@@ -61,12 +61,12 @@ const listItemData = [
     icon:<img src={sticon} alt="Staff Feedback" style={{ width: "18px", height: "18px" }} />,
   },
   {
-    label: "Leader Borad",
+    label: "LeaderBoard",
     link: "/admin/leaderboard",
     icon: <img src={licon} alt="Leader Board" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },
   {
-    label: "Report",
+    label: "Reports",
     link: "/admin/report",
     icon: <img src={ricon} alt="Report" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },

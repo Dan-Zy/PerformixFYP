@@ -90,24 +90,24 @@ export default function Goal() {
         <h2 className="hidden md:block text-lg font-semibold text-gray-700">Goals</h2>
         <div className="flex flex-col sm:flex-row items-center space-x-2 sm:space-x-2 mt-4 sm:mt-0">
           <div className="relative w-full sm:w-90 mb-2 sm:mb-0">
-            <HiSearch className="absolute left-3 top-3 text-gray-500" />
+            {/* <HiSearch className="absolute left-3 top-3 text-gray-500" />
             <input
               type="text"
               placeholder="Search employee..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            {searchTerm && (
+            /> */}
+            {/* {searchTerm && (
               <HiX
                 className="absolute right-3 top-3 text-gray-500 cursor-pointer"
                 onClick={() => setSearchTerm("")}
               />
-            )}
+            )} */}
           </div>
-          <div className="p-1 border border-gray-300 rounded-lg m-1">
+          {/* <div className="p-1 border border-gray-300 rounded-lg m-1">
             <MdFilterList size={28} color="#777b8b" />
-          </div>
+          </div> */}
           <button
             className="bg-blue-500 w-2/3 text-white px-4 py-2 rounded-lg flex items-center space-x-1"
             onClick={() => setIsModalOpen(true)}

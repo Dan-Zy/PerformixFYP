@@ -55,6 +55,8 @@ export default function Dashboard() {
             date: new Date(emp.date), // Convert to Date object
           }));
           setEmployees(employeeData);
+          console.log('employee :' , employeeData);
+          
           setFilteredEmployees(employeeData);
 
           // Set Activities Data
@@ -160,11 +162,10 @@ export default function Dashboard() {
           <h2 className="text-xl font-bold">Department Performance</h2>
 
           {/* Dropdown for Filter */}
-          <Dropdown label={selectedFilter} inline arrowIcon className="cursor-pointer">
+          {/* <Dropdown label={selectedFilter} inline arrowIcon className="cursor-pointer">
             <Dropdown.Item onClick={() => filterData("Last Month")}>Last Month</Dropdown.Item>
-            <Dropdown.Item onClick={() => filterData("This Month")}>This Month</Dropdown.Item>
             <Dropdown.Item onClick={() => filterData("Last Week")}>Last Week</Dropdown.Item>
-          </Dropdown>
+          </Dropdown> */}
         </div>
 
         {/* Scrollable Chart Container */}

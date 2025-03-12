@@ -16,7 +16,7 @@ export default function Report() {
         <form>
           <div className="flex flex-col md:flex-row items-center gap-4">
             {/* Start Time */}
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label
                 htmlFor="start-time"
                 className="text-sm font-semibold text-[#030303] dark:text-white"
@@ -43,10 +43,10 @@ export default function Report() {
                   </option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
             {/* End Time */}
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label
                 htmlFor="end-time"
                 className="text-sm font-semibold text-[#030303] dark:text-white"
@@ -73,7 +73,7 @@ export default function Report() {
                   </option>
                 </select>
               </div>
-            </div>
+            </div> */}
           </div>
         </form>
 

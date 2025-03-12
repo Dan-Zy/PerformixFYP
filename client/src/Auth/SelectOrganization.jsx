@@ -59,9 +59,11 @@ console.log('token ', token);
   
     console.log("Selected Organization:", selectedOrg);
     
+    
     // Save the organization ID in localStorage
     if (selectedOrg) {
       localStorage.setItem("selectedOrganizationId", selectedOrg.organization_id);
+      localStorage.setItem("selectedOrganization", selectedOrg.organization_name);
     }
   
     // Navigate to the next page

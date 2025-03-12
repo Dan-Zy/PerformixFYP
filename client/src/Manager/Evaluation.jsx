@@ -11,24 +11,36 @@ const Evaluation = () => {
   const [feedback, setFeedback] = useState([]);
   const [viewGraph, setViewGraph] = useState(false); // Toggle state
 
-  useEffect(() => {
+  useEffect(() => {  
     const fetchEvaluations = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get("http://localhost:8080/user/get-evaluations", {
           headers: { Authorization: `${token}` },
         });
-
+    
+        console.log("data:", response.data);
+    
         if (response.data.success) {
-          setEvaluations(response.data.evaluations);
+          // Ensure evaluations is an array
+          const evaluations = Array.isArray(response.data.evaluations) 
+            ? response.data.evaluations 
+            : [];
+    
+          setEvaluations(evaluations);
           setTotalEvaluations(response.data.total_evaluations);
-          setFeedback(response.data.evaluations.map((item) => item.feedback || "No feedback available"));
+    
+          setFeedback(
+            evaluations.length > 0
+              ? evaluations.map((item) => item.feedback?.trim() || "No feedback available")
+              : ["No Evaluations evaluated for you by your Admin"]
+          );
         }
       } catch (error) {
         console.error("Error fetching evaluations:", error);
       }
     };
-
+    
     fetchEvaluations();
   }, []);
 

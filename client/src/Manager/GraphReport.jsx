@@ -43,21 +43,27 @@ const GraphReport = () => {
         const response = await axios.get("http://localhost:8080/user/get-evaluations", {
           headers: { Authorization: `${token}` },
         });
-
+  
         if (response.data.success) {
-          setEvaluations(response.data.evaluations);
+          // Ensure evaluations is always an array
+          const evaluations = Array.isArray(response.data.evaluations) 
+            ? response.data.evaluations 
+            : [];
+  
+          setEvaluations(evaluations);
         }
       } catch (error) {
         console.error("Error fetching evaluations:", error);
       }
     };
-
+  
     fetchEvaluations();
   }, []);
-
-  const labels = evaluations.map((e) => e.metric_name);
-  const dataValues = evaluations.map((e) => e.marks_obtained);
-  const totalWeightages = evaluations.map((e) => e.total_weightage);
+  
+  const labels = evaluations.length > 0 ? evaluations.map((e) => e.metric_name) : [];
+  const dataValues = evaluations.length > 0 ? evaluations.map((e) => e.marks_obtained) : [];
+  const totalWeightages = evaluations.length > 0 ? evaluations.map((e) => e.total_weightage) : [];
+  
 
   const doughnutData = {
     labels,

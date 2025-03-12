@@ -28,7 +28,7 @@ const drawerWidth = 250;
 
 const listItemData = [
   {
-    label: "Dashboards",
+    label: "Dashboard",
     link: "/employee/dashboard",
     icon: <img src={dicon} alt="Dashboard" style={{ width: "18px", height: "18px" }} />,
   },
@@ -39,12 +39,12 @@ const listItemData = [
   },
  
   {
-    label: "Servey",
+    label: "Survey",
     link: "/employee/feedback",
     icon: <img src={sticon} alt="Staff Feedback" style={{ width: "18px", height: "18px" }} />,
   },
   {
-    label: "Leaderboard",  // Fixed spelling
+    label: "LeaderBoard",  // Fixed spelling
     link: "/employee/leaderboard",
     icon: <img src={licon} alt="Leaderboard" style={{ width: "18px", height: "18px" }} />,
   },
@@ -117,7 +117,7 @@ function SideNav(props) {
    
 
       {/* Search Input */}
-      <form class="max-w-md mx-2">
+      {/* <form class="max-w-md mx-2">
         <div class="relative">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
@@ -144,7 +144,7 @@ function SideNav(props) {
             required
           />
         </div>
-      </form>
+      </form> */}
 
       {/* Menu List */}
       <List

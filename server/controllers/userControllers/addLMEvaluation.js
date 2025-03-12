@@ -198,6 +198,9 @@ export const addLMEvaluation = async (req , res) => {
 
 
         // GET THE DEPARTMENT ID TO VERIFY EITHER THE GIVEN LINE MANAGE AND EMPLOYEE IS FROM THE SAME DEPARTMENT
+console.log('metric_id', metric_id);
+console.log('line_manager_id', line_manager_id);
+
 
         const getDepartmentQuery = `
             SELECT department_id FROM metric_assignments WHERE metric_id = ? AND line_manager_id = ? ORDER BY assignment_id DESC;

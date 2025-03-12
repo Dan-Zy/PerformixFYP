@@ -28,12 +28,12 @@ const drawerWidth = 250;
 
 const listItemData = [
   {
-    label: "Dashboards",
+    label: "Dashboard",
     link: "/manger/dashboard",
     icon: <img src={dicon} alt="Dashboard" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },
   {
-    label: "Employee",
+    label: "Employees",
     link: "/manger/team",
     icon: <img src={eicon} alt="Org Details" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },
@@ -54,7 +54,7 @@ const listItemData = [
   },
   
   {
-    label: "Leader Borad",
+    label: "LeaderBoard",
     link: "/manger/leaderboard",
     icon: <img src={licon} alt="Leader Board" style={{ width: "18px", height: "18px" }} />,  // Use image icon
   },

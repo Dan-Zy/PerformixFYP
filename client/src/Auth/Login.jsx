@@ -33,6 +33,12 @@ export default function Login() {
       });
       return;
     }
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("Managertoken");
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem("Stafftoken");
+ 
 
     try {
       const response = await axios.post(

@@ -12,12 +12,12 @@ function Recomendation() {
 
   const fetchRecommendations = async () => {
     try {
-      const token = localStorage.getItem("token"); // Get token from local storage
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found");
         return;
       }
-
+  
       const response = await axios.get(
         "http://localhost:8080/recommendation/get-recommendations",
         {
@@ -26,18 +26,30 @@ function Recomendation() {
           },
         }
       );
-
-      setRecommendations(response.data.recommendations);
+  
+      // Ensure recommendations is an array
+      const recommendations = Array.isArray(response.data.recommendations) 
+        ? response.data.recommendations 
+        : [];
+  
+      setRecommendations(recommendations);
+      console.log("Data:", recommendations);
+      
     } catch (error) {
       console.error("Error fetching recommendations:", error);
     }
   };
-
+  
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = recommendations.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = (recommendations.length > 0) 
+    ? recommendations.slice(indexOfFirstItem, indexOfLastItem) 
+    : []; // Ensure currentItems is always an array
+  
 
+  // Pagination logic
+  
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Recommendations</h2>
