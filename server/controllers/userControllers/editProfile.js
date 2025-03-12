@@ -27,8 +27,8 @@ export const editProfile = async (req, res) => {
             return res.status(403).json({ success: false, message: "Unauthorized to edit this profile" });
         }
 
-        // Check if user exists
-        const checkUserQuery = `SELECT * FROM users WHERE user_id = ? AND is_active = 1 AND (created_by IS NULL OR created_by = 0)`;
+        // Check if the user exists
+        const checkUserQuery = `SELECT * FROM users WHERE user_id = ? AND is_active = 1`;
         const user = await new Promise((resolve, reject) => {
             db.query(checkUserQuery, [user_id], (err, results) => {
                 if (err) reject(err);
@@ -37,7 +37,10 @@ export const editProfile = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found or not active" });
+            return res.status(404).send({
+                success: false,
+                message: "User not Found",
+            });
         }
 
         // Prepare update query

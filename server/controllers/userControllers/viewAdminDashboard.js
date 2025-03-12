@@ -111,11 +111,13 @@ export const viewAdminDashboard = async (req, res) => {
             LEFT JOIN line_manager_evaluations lme ON u.user_id = lme.line_manager_id AND u.role_id = 2
             WHERE d.organization_id = 1
             AND u.role_id IN (2, 3)
+            AND u.created_by = ?
+            GROUP BY u.full_name
             ORDER BY d.department_name, u.full_name;
 
         `;
         const employeesData = await new Promise((resolve, reject) => {
-            db.query(employeesDataQuery, [organization_id], (err, results) => {
+            db.query(employeesDataQuery, [organization_id, user_id], (err, results) => {
                 if (err) reject(err);
                 else resolve(results);
             });

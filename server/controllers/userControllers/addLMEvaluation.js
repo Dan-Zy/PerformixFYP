@@ -341,12 +341,12 @@ console.log('line_manager_id', line_manager_id);
                     reject(err);
                 }
                 else{
-                    resolve(results);
+                    resolve(results[0]);
                 }
             });
         });
 
-        if(dataExist.length !== 0 || dataExist.length !== '0' || dataExist != 0){
+        if(dataExist){
             return res.status(400).send({
                 success: false,
                 message: "You have already eveluated this Line Manager for the given parameter of the given metric"
