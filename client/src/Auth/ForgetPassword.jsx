@@ -35,7 +35,7 @@ export default function ForgotPassword() {
       console.log("Token:", token);
 
       // Show success message
-      toast.success("Verification code sent! Redirecting...", {
+      toast.success("Verification Link sent it! Now Check your email ", {
         position: "top-right",
         autoClose: 2000, // Shorter duration to let the user navigate smoothly
         closeOnClick: true,
@@ -44,7 +44,7 @@ export default function ForgotPassword() {
       // Delay navigation slightly to allow the toast to display
       setTimeout(() => {
         // Navigate to new-password page with token and email in state
-        navigate("/new-password", { state: { token } });
+        // navigate("/new-password", { state: { token } });
       }, 2000);
     } catch (error) {
       toast.error(error.response?.data?.message || "Error occurred, please try again.", {

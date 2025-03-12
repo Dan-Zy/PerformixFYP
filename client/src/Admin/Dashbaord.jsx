@@ -69,8 +69,37 @@ export default function Dashboard() {
         toast.error("Error fetching dashboard data.");
       }
     };
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/user/get-recent-activities`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
+    console.log('response', response.data);
+    
+        if (response.data.success) {
+          const data = response.data.recentActivities.map((activity) => ({
+            id: activity.activity_id,
+            title: activity.table_name, // You can modify this as needed
+            time: new Date(activity.timestamp).toLocaleString(),
+            description: activity.activity_description,
+          }));
+    
+          setActivities(data);
+        } else {
+          toast.error("Failed to fetch recent activities.");
+        }
+      } catch (error) {
+        console.error("Error fetching recent activities:", error);
+        toast.error("Error fetching recent activities.");
+      }
+    };
+    
 
     fetchData();
+    fetchActivities();
   }, [organization_id, token]);
 
   // Filter Function
@@ -162,32 +191,33 @@ export default function Dashboard() {
 
         {/* Recent Activity Section */}
         <div className="bg-white shadow-lg p-6 rounded-lg lg:w-1/3">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Recent Activity</h2>
-            <p className="text-gray-500 text-lg cursor-pointer hover:underline">View all</p>
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-xl font-bold">Recent Activity</h2>
+    <p className="text-gray-500 text-lg cursor-pointer hover:underline">View all</p>
+  </div>
+  <ul className="relative">
+    {activities.length > 0 ? (
+      activities.map((activity) => (
+        <li key={activity.id} className="flex items-start space-x-4 py-4 relative">
+          <div className="w-4 flex flex-col items-center">
+            <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+            <div className="h-full w-0.5 bg-blue-500"></div>
           </div>
-          <ul className="relative">
-            {activities.length > 0 ? (
-              activities.map((activity, index) => (
-                <li key={index} className="flex items-start space-x-4 py-4 relative">
-                  <div className="w-4 flex flex-col items-center">
-                    <div className="h-4 w-4 bg-blue-500 rounded-full"></div>
-                    {index !== activities.length - 1 && <div className="h-full w-0.5 bg-blue-500"></div>}
-                  </div>
-                  <div className="bg-gray-100 p-4 rounded-lg w-full shadow-sm">
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm font-bold">{activity.title}</p>
-                      <p className="text-xs text-gray-500">{activity.time}</p>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-1">{activity.description}</p>
-                  </div>
-                </li>
-              ))
-            ) : (
-              <p className="text-gray-500">No recent activity found.</p>
-            )}
-          </ul>
-        </div>
+          <div className="bg-gray-100 p-4 rounded-lg w-full shadow-sm">
+            <div className="flex justify-between items-center">
+              <p className="text-sm font-bold">{activity.title}</p>
+              <p className="text-xs text-gray-500">{activity.time}</p>
+            </div>
+            <p className="text-xs text-gray-600 mt-1">{activity.description}</p>
+          </div>
+        </li>
+      ))
+    ) : (
+      <p className="text-gray-500">No recent activity found.</p>
+    )}
+  </ul>
+</div>
+
       </div>
     </div>
   );

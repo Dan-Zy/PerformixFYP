@@ -27,12 +27,9 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
 
   // Dummy Activities Data
-  const activities = [
-    { title: "Added Employee", description: "New employee added to Sales." },
-    { title: "Profile Update", description: "John Doe updated profile information." },
-    { title: "Task Assigned", description: "New task assigned to Marketing team." },
-    { title: "Performance Review", description: "Quarterly performance review completed." },
-  ];
+  
+
+  const [activities , setActivities] =useState([]);
 
   // Fetch Dashboard Data
   useEffect(() => {
@@ -80,6 +77,32 @@ export default function Dashboard() {
       }
     };
 
+    const fetchActivities = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/lm/get-recent-activities", {
+          headers: { Authorization: `${token}` },
+        });
+    
+        if (response.data.success) {
+          const formattedActivities = response.data.recentActivities.map((activity) => ({
+            id: activity.activity_id,  // Unique ID for key
+            title: activity.table_name.replace(/_/g, " "), // Format table name
+            description: activity.activity_description,
+            time: new Date(activity.timestamp).toLocaleString(), // Format time
+          }));
+    
+          setActivities(formattedActivities);
+        } else {
+          toast.error(response.data.message || "Failed to fetch recent activities.");
+        }
+      } catch (error) {
+        toast.error("Error fetching recent activities.");
+        console.error("Error:", error);
+      }
+    };
+    
+
+    fetchActivities();
     fetchDashboardData();
   }, [token]);
 
@@ -154,31 +177,33 @@ export default function Dashboard() {
 
   {/* Recent Activity Section (4 columns on large screens) */}
   <div className="bg-white shadow-lg p-6 rounded-lg lg:col-span-4">
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-xl font-bold">Recent Activity</h2>
-      <p className="text-gray-500 text-lg cursor-pointer">View all</p>
-    </div>
-    <ul className="relative">
-      {activities.map((activity, index) => (
-        <li
-          key={index}
-          className="flex items-start space-x-4 py-4 relative"
-        >
-          <div className="flex flex-col bg-gray-100 p-4 rounded-lg w-full shadow-sm">
+  <div className="flex justify-between items-center mb-4">
+    <h2 className="text-xl font-bold">Recent Activity</h2>
+    <p className="text-gray-500 text-lg cursor-pointer hover:underline">View all</p>
+  </div>
+  <ul className="relative">
+    {activities.length > 0 ? (
+      activities.map((activity, index) => (
+        <li key={activity.id} className="flex items-start space-x-4 py-4 relative">
+          <div className="w-4 flex flex-col items-center">
+            <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+            {index !== activities.length - 1 && <div className="h-full w-0.5 bg-blue-500"></div>}
+          </div>
+          <div className="bg-gray-100 p-4 rounded-lg w-full shadow-sm">
             <div className="flex justify-between items-center">
               <p className="text-sm font-bold">{activity.title}</p>
+              <p className="text-xs text-gray-500">{activity.time}</p>
             </div>
-            <p className="text-xs text-gray-600 mt-1">
-              {activity.description}
-            </p>
+            <p className="text-xs text-gray-600 mt-1">{activity.description}</p>
           </div>
-          {index !== activities.length - 1 && (
-            <div className="absolute left-4 top-22 h-full w-0.5 bg-blue-500"></div>
-          )}
         </li>
-      ))}
-    </ul>
-  </div>
+      ))
+    ) : (
+      <p className="text-gray-500">No recent activity found.</p>
+    )}
+  </ul>
+</div>
+
 </div>
 
 

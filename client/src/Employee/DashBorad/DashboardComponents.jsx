@@ -1,5 +1,8 @@
-import React from "react";
+import React ,{ useState,useEffect} from "react";
 import { Doughnut } from "react-chartjs-2";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const RankCard = ({ rank }) => (
   <div className="p-2 bg-white rounded-lg border-l-4 border-[#335679]">
@@ -91,28 +94,54 @@ export const RecommendationForm = ({ recommendation, setRecommendation, submitRe
 );
 
 export const UserActivity = () => {
-    const activities = [
-      { title: "General Text", description: "John Doe added as an Employee in Sales", time: "1 hr ago" },
-      { title: "General Text", description: "John Doe updated profile information", time: "2 hrs ago" },
-      { title: "General Text", description: "Jane Smith completed a project milestone", time: "4 hrs ago" },
-      { title: "General Text", description: "David Brown assigned a new task", time: "5 hrs ago" },
-    ];
-  
-    return (
-      <div className="bg-white shadow-lg p-6 rounded-lg w-full">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Recent Activity</h2>
-          <p className="text-gray-500 text-lg cursor-pointer">View all</p>
-        </div>
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchRecentActivities = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/staff/get-recent-activities", {
+          headers: { Authorization: `${token}` },
+        });
+
+        if (response.data.success && response.data.recentActivities) {
+          setActivities(response.data.recentActivities);
+        } else {
+          toast.warn("No recent activities available.");
+        }
+      } catch (error) {
+        toast.error("Error fetching recent activities.");
+        console.error("Error fetching recent activities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecentActivities();
+  }, []);
+
+  return (
+    <div className="bg-white shadow-lg p-6 rounded-lg w-full">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Recent Activity</h2>
+        <p className="text-gray-500 text-lg cursor-pointer">View all</p>
+      </div>
+
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : activities.length === 0 ? (
+        <p className="text-center text-gray-500">No recent activities found.</p>
+      ) : (
         <ul className="relative">
           {activities.map((activity, index) => (
-            <li key={index} className="flex items-start space-x-4 py-4 relative">
+            <li key={activity.activity_id} className="flex items-start space-x-4 py-4 relative">
               <div className="flex flex-col bg-gray-100 p-4 rounded-lg w-full shadow-sm">
                 <div className="flex justify-between items-center">
-                  <p className="text-sm font-bold">{activity.title}</p>
-                  <p className="text-sm text-gray-500">{activity.time}</p>
+                  <p className="text-sm font-bold">{activity.action_type}</p>
+                  <p className="text-sm text-gray-500">{new Date(activity.timestamp).toLocaleString()}</p>
                 </div>
-                <p className="text-xs text-gray-600 mt-1">{activity.description}</p>
+                <p className="text-xs text-gray-600 mt-1">{activity.activity_description}</p>
               </div>
               {index !== activities.length - 1 && (
                 <div className="absolute left-4 top-22 h-8 w-0.5 bg-blue-500"></div>
@@ -120,7 +149,8 @@ export const UserActivity = () => {
             </li>
           ))}
         </ul>
-      </div>
-    );
-  };
+      )}
+    </div>
+  );
+};
   

@@ -92,11 +92,29 @@ const Report = () => {
     );
   };
 
-  const handleMenuAction = (action, rowId) => {
+  const handleMenuAction = async (action, rowId) => {
     if (action === "detail") {
       alert(`View details of ${rowId}`);
     } else if (action === "delete") {
       alert(`Delete row with ID ${rowId}`);
+
+      try {
+        const response = await axios.delete(`http://localhost:8080/user/delete-employee/${rowId}`, {
+          headers: { Authorization: `${token}` },
+        });
+
+        if (response.data.success) {
+          toast.success('this user dele succes full')
+        }
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Error fetching data!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+      
     }
   };
   const handleStartDateChange = (value) => {
@@ -237,7 +255,7 @@ const Report = () => {
                     <Dropdown.Item onClick={() => handleMenuAction("detail", row.id)}>
                       Detail
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleMenuAction("delete", row.id)}>
+                    <Dropdown.Item onClick={() => handleMenuAction("delete", row)}>
                       Delete
                     </Dropdown.Item>
                   </Dropdown>
