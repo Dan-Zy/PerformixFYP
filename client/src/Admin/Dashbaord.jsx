@@ -96,7 +96,7 @@ export default function Dashboard() {
         toast.error("Error fetching recent activities.");
       }
     };
-    
+    fetchActivities();
 
     fetchData();
     fetchActivities();

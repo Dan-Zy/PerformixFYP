@@ -121,8 +121,8 @@ console.log("Google ID token:",credentialResponse);
       // Store token and user data in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("email", user.email);
-      localStorage.setItem("full_name", user.name);
-      localStorage.setItem("profile_photo", user.picture);
+      localStorage.setItem("full_name", user.full_name);
+      localStorage.setItem("profile_photo", user.profile_photo);
 
 console.log("anyOrganization", anyOrganization);
 console.log("user", user , token);

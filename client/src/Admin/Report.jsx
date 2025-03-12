@@ -10,6 +10,9 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MdOutlineDelete } from "react-icons/md";
+import { HiSearch, HiX, HiTrash } from "react-icons/hi";
+
 
 const Report = () => {
   const rowsPerPage = 10;
@@ -86,11 +89,32 @@ const Report = () => {
     );
   };
 
-  const handleMenuAction = (action, rowId) => {
+
+  const handleMenuAction = async (action, rowId) => {
     if (action === "detail") {
       alert(`View details of ${rowId}`);
     } else if (action === "delete") {
-      alert(`Delete row with ID ${rowId}`);
+      const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+      if (!confirmDelete) return;
+  
+      try {
+        const response = await axios.delete(
+          `http://localhost:8080/user/delete-employee/${rowId}`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
+  
+        if (response.data.success) {
+          toast.success("User deleted successfully");
+          if (refreshData) refreshData(); // Refresh the list after deletion
+        } else {
+          toast.error("Failed to delete the user.");
+        }
+      } catch (error) {
+        console.error("Delete request error:", error);
+        toast.error("Error deleting user!");
+      }
     }
   };
   const handleStartDateChange = (value) => {
@@ -223,18 +247,19 @@ const Report = () => {
                   </div>
                 ),
                 action: (
-                  <Dropdown
-                    arrowIcon={false}
-                    inline={true}
-                    label={<FiMoreVertical className="cursor-pointer text-xl" />}
-                  >
-                    <Dropdown.Item onClick={() => handleMenuAction("detail", row.id)}>
-                      Detail
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleMenuAction("delete", row.id)}>
-                      Delete
-                    </Dropdown.Item>
-                  </Dropdown>
+                  // <Dropdown
+                  //   arrowIcon={false}
+                  //   inline={true}
+                  //   label={<FiMoreVertical className="cursor-pointer text-xl" />}
+                  // >
+                  //   {/* <Dropdown.Item onClick={() => handleMenuAction("detail", row.id)}>
+                  //     Detail
+                  //   </Dropdown.Item> */}
+                  //   <Dropdown.Item onClick={() => handleMenuAction("delete", row.id)}>
+                  //     Delete
+                  //   </Dropdown.Item>
+                  // </Dropdown>
+                  <HiTrash  color="red" size={24} onClick={() => handleMenuAction("delete", row.id)} className="cursor-pointer"/>
                 ),
               }))}
               styleTableContainer={{ boxShadow: "none", borderRadius: "10px" }}
